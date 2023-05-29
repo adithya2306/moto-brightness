@@ -1,0 +1,5 @@
+bl_lut.txt
+bin/Spline$MonotoneCubicSpline.class
+bin/Spline$LinearSpline.class
+bin/Spline.class
+bin/MotoBrightness.class
