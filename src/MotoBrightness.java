@@ -2,6 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class MotoBrightness {
+
     private static final boolean DEBUG = false;
 
     /* values for moto edge 30 (dubai) */
@@ -50,8 +51,6 @@ public class MotoBrightness {
             final float f = (i == 1)
                 ? (MIN_BL / MAX_BL_HBM) // use known lowest min bl-nit
                 : bl[i];
-            if (DEBUG)
-                System.out.println(bl[i] + " -> " + f);
             System.out.println("<point>");
             System.out.println(String.format("    <value>%.8f</value>", f));
             System.out.println(String.format("    <nits>%.1f</nits>", n[i]));
@@ -67,6 +66,7 @@ public class MotoBrightness {
         float x[] = new float[len + 2];
         float y[] = new float[len + 2];
         float n[] = new float[len + 2];
+
         // begin all arrays with 0
         x[0] = y[0] = n[0] = 0f;
 
