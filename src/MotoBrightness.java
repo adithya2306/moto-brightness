@@ -9,10 +9,10 @@ public class MotoBrightness {
 
     private static final float MAX_BL = 3514f;
     private static final float MAX_BL_HBM = 4095f;
-    // private static final int MAX_NITS = 500;
+    private static final int MAX_NITS = 500;
     private static final int MAX_NITS_HBM = 700;
     private static final float MIN_BL = 9f;
-    // private static final int MIN_NITS = 2;
+    private static final int MIN_NITS = 2;
 
     private static final float bl_x[] = {
         1, 4, 5, 6, 12, 48, 57, 76, 98, 129, 255
@@ -47,10 +47,23 @@ public class MotoBrightness {
     }
 
     private static void printBlNitMapping(float bl[], float n[]) {
+        // simple bl-nit mapping for lower part of the curve
+        final float sbl[] = {(MIN_BL / MAX_BL_HBM), 1f};
+        final float sn[] = {MIN_NITS, MAX_NITS_HBM};
+        Spline s = Spline.createMonotoneCubicSpline(sn, sbl);
+
         for (int i = 1; i < n.length; i++) {
-            final float f = (i == 1)
-                ? (MIN_BL / MAX_BL_HBM) // use known lowest min bl-nit
-                : bl[i];
+            float f;
+            if (n[i] == MIN_NITS)
+                f = MIN_BL / MAX_BL_HBM; // use known lowest bl
+            else if (n[i] == MAX_NITS)
+                f = MAX_BL / MAX_BL_HBM; // use known highest (non-hbm) bl
+            else
+                f = s.interpolate(n[i]);
+
+            if (DEBUG)
+                System.out.println(n[i] + " -> " + bl[i] + " " + f);
+
             System.out.println("<point>");
             System.out.println(String.format("    <value>%.8f</value>", f));
             System.out.println(String.format("    <nits>%.1f</nits>", n[i]));
